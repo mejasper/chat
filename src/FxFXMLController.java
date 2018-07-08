@@ -45,15 +45,8 @@ public class FxFXMLController
     @FXML
     private void printOutput()
     {
-        outputText.setText(inputText.getText());
-        heslig.setText("Clear");
     }
 
-    @FXML
-    private void lmao(){
-        outputText.setText("");
-        heslig.setText("Cleared");
-    }
     @FXML
     private void handleButtonAction() throws IOException {
 //        System.out.println("You clicked me!");
