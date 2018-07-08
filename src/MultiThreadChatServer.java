@@ -1,5 +1,7 @@
 import Decks.Card;
 import Decks.Deck;
+import javafx.stage.Stage;
+
 import java.io.DataInputStream;
 import java.io.PrintStream;
 import java.io.IOException;
@@ -7,21 +9,28 @@ import java.net.Socket;
 import java.net.ServerSocket;
 import java.util.ArrayList;
 
-public class MultiThreadChatServer {
+public class MultiThreadChatServer extends Thread{
 
     private static ServerSocket serverSocket = null;
     private static Socket clientSocket = null;
     private static final int maxClientsCount = 10;
     private static final clientThread[] threads = new clientThread[maxClientsCount];
     private static Deck deck;
+    private static FxFXMLController stage;
 
-    public static void main(String args[]) {
+    public MultiThreadChatServer(FxFXMLController stage, String[] args){
+        this.stage = stage;
+    }
+    public void run(){
 
+//    }
+//    public static void main(String args[]) {
 
+        stage.outputText.setText("Connected");
         int portNumber = 2222;
-        if (args.length == 1) {
-            portNumber = Integer.valueOf(args[0]).intValue();
-        }
+//        if (args.length == 1) {
+//            portNumber = Integer.valueOf(args[0]).intValue();
+//        }
 
         try {
             serverSocket = new ServerSocket(portNumber);
@@ -36,7 +45,7 @@ public class MultiThreadChatServer {
                 int i = 0;
                 for (i = 0; i < maxClientsCount; i++) {
                     if (threads[i] == null) {
-                        (threads[i] = new clientThread(clientSocket, threads, deck)).start();
+                        (threads[i] = new clientThread(clientSocket, threads, deck, stage)).start();
                         break;
                     }
                 }
@@ -68,9 +77,11 @@ class clientThread extends Thread {
     private int maxClientsCount;
     private Deck deck;
     private ArrayList<Card> hand;
+    FxFXMLController stage;
 
-    public clientThread(Socket clientSocket, clientThread[] threads, Deck c) {
+    public clientThread(Socket clientSocket, clientThread[] threads, Deck c, FxFXMLController stage) {
         this.deck = c;
+        this.stage = stage;
         this.clientSocket = clientSocket;
         this.threads = threads;
         maxClientsCount = threads.length;
@@ -95,7 +106,7 @@ class clientThread extends Thread {
                 }
             }
 
-
+            stage.outputText.setText(name + " has connected");
             synchronized (this) {
                 for (int i = 0; i < maxClientsCount; i++) {
                     if (threads[i] != null && threads[i] == this) {
@@ -117,6 +128,7 @@ class clientThread extends Thread {
                     break;
                 }
                 int ind = Integer.parseInt(line);
+                stage.outputText.setText(stage.outputText.getText()+ "\n"+ name + " played: " + hand.get(ind));
                 hand.remove(ind);
                 hand.add(deck.getCard());
 

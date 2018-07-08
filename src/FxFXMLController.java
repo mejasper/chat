@@ -17,11 +17,11 @@ public class FxFXMLController
 {
     @FXML
     // The reference of inputText will be injected by the FXML loader
-    private TextField inputText;
+    public TextField inputText;
 
     // The reference of outputText will be injected by the FXML loader
     @FXML
-    private TextArea outputText;
+    public TextArea outputText;
 
     @FXML
     private Button heslig;
@@ -56,11 +56,14 @@ public class FxFXMLController
     }
     @FXML
     private void handleButtonAction() throws IOException {
-        System.out.println("You clicked me!");
+//        System.out.println("You clicked me!");
         Stage stage = (Stage) heslig.getScene().getWindow();
-        Parent root = FXMLLoader.load(getClass().getResource("main/ressources/test.fxml"));
+//        Parent root = FXMLLoader.load(getClass().getResource("main/ressources/test.fxml"));
+//
+//        stage.setTitle("Doomsday");
+//        stage.setScene(new Scene(root, 300, 275));
+        String[] lmao = {"hjel0o", "hlkdjs"};
+        new MultiThreadChatServer(this, lmao).start();
 
-        stage.setTitle("Doomsday");
-        stage.setScene(new Scene(root, 300, 275));
     }
 }
